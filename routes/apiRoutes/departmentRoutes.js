@@ -39,5 +39,30 @@ router.get("/department/:id", (req, res) => {
     });
 });
 
+// create a new department 
+router.post('/department', ({ body }, res) => {
+    // validation check
+    const errors = inputCheck(body, 'name');
+    if (errors) {
+        res.status(400).json({ error: errors });
+        return;
+    }
+
+    const sql = `INSERT INTO departments (name)
+        VALUES (?)`;
+    const params = [body.name];
+
+    db.query(sql, params, (err, result) => {
+        if (err) {
+            res.status(400).json({ error: err.message });
+            return;
+        }
+        res.json({
+            message: 'success',
+            data: body
+        });
+    });
+});
+
 
 module.exports = router;

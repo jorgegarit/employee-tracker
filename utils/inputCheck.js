@@ -3,7 +3,7 @@ module.exports = function(obj, ...props) {
     const errors = [];
 
     props.forEach((prop) => {
-        if (obj[prop] === undefined || onj[prop] === '') {
+        if (obj[prop] === undefined || obj[prop] === '') {
             errors.push(`NO ${prop} specified.`);
         }
     });
