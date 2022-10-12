@@ -1,7 +1,7 @@
 -- Using this for testing the dtaabase, can erase later if I want
-DROP TABLE IF EXISTS departments;
-DROP TABLE IF EXISTS roles;
-DROP TABLE IF EXISTS employees;
+-- DROP TABLE IF EXISTS departments;
+-- DROP TABLE IF EXISTS roles;
+-- DROP TABLE IF EXISTS employees;
 
 CREATE TABLE departments (
     id INTEGER AUTO_INCREMENT PRIMARY KEY,
@@ -10,7 +10,7 @@ CREATE TABLE departments (
 
 CREATE TABLE roles (
     id INTEGER AUTO_INCREMENT PRIMARY KEY,
-    title VARCHAR(30) NOT NULL,
+    title VARCHAR(50) NOT NULL,
     salary DECIMAL NOT NULL,
     departments_id INTEGER,
     FOREIGN KEY (departments_id) REFERENCES departments(id)
