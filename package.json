@@ -1,27 +1,16 @@
+
 {
-  "dependencies": {
-    "console.table": "^0.10.0",
-    "express": "^4.18.2",
-    "inquirer": "^8.2.4",
-    "mysql2": "^2.3.3"
-  },
+  "name": "employee-tracker",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
   "scripts": {
     "test": "jest",
     "start": "node server.js"
   },
-  "name": "employee-tracker",
-  "description": "",
-  "version": "1.0.0",
-  "main": "index.js",
-  "directories": {
-    "lib": "lib"
-  },
-  "devDependencies": {
-    "jest": "^29.1.2"
-  },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/jorgegarit/employee-tracker.git"
+    "url": "git+https://github.com/samkarp700/employee-tracker.git"
   },
   "keywords": [],
   "author": "",
@@ -30,4 +19,12 @@
     "url": "https://github.com/jorgegarit/employee-tracker/issues"
   },
   "homepage": "https://github.com/jorgegarit/employee-tracker#readme",
+  "devDependencies": {
+    "jest": "^29.0.3"
+  },
+  "dependencies": {
+    "express": "^4.18.1",
+    "inquirer": "^8.2.4",
+    "mysql2": "^2.3.3"
+  }
 }
