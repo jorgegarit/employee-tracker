@@ -41,9 +41,9 @@ const initialize = () => {
         } else if (data.selections === 'Add New Role') {
             addRolePrompt();
         } else if (data.selections === 'Add New Employee') {
-            addEmployee();
+            addEmployeePrompt();
         } else if (data.selections === 'Update Current Employee Role') {
-            updateEmployeeRole();
+            updateEmployeeRolePrompt();
         } else if (data.selections === 'Quit') {
             quitSelections();
         }
@@ -204,3 +204,134 @@ const addRole = (body) => {
         initialize();
     });
 };
+
+// This section will contain the fucntion for getting all employee data 
+// as well as prompt to add new employee and update employee role
+
+const allEmployees = (req) => {
+    const sql = `SELECT * FROM employees`;
+
+    db.query(sql, (err, rows) => {
+        if (err) {
+            res.status(500).json({ error: err.message });
+            return;
+        }
+        console.table(rows)
+        initialize();
+    });
+};
+
+const addEmployeePrompt = () => {
+    inquirer.prompt([
+        {
+            type: 'input', 
+            name: 'first_name',
+            message: 'Please enter employees first name.',
+            validated: inputtedFirstName => {
+                if (inputtedFirstName) {
+                    return true;
+                } else {
+                    console.log('Please enter a first name.');
+                    return false;
+                }
+            }
+        },
+        {
+            type: 'input', 
+            name: 'last_name',
+            message: 'Please enter employees last name.',
+            validated: inputtedLastName => {
+                if (inputtedLastName) {
+                    return true;
+                } else {
+                    console.log('Please enter a last name.');
+                    return false;
+                }
+            }
+        },
+        {
+            type: 'list', 
+            name: 'roles',
+            message: 'What is this employees role?',
+            choices: [
+                {
+                    name: 'UX/UI Developer',
+                    value: 1
+                },
+                {
+                    name: 'Product Development Engineer',
+                    value: 2
+                },
+                {
+                    name: 'Sr. Product Development Engineer',
+                    value: 3
+                },
+                {
+                    name: 'Products Manager',
+                    value: 4
+                },
+                {
+                    name: 'Front-End Developer',
+                    value: 5
+                },
+                {
+                    name: 'Back-End Developer',
+                    value: 6
+                },
+                {
+                    name: 'Full-Stack Lead Developer',
+                    value: 7
+                },
+                {
+                    name: 'Customer Support Rep',
+                    value: 8
+                },
+                {
+                    name: 'Technical Support Rep',
+                    value: 9
+                },
+                {
+                    name: 'Customer Support Lead',
+                    value: 10
+                },
+                {
+                    name: 'Technical Support Lead',
+                    value: 11
+                },
+                {
+                    name: 'Operations Manager',
+                    value: 12
+                },
+                {
+                    name: 'Sales Development Rep',
+                    value: 13
+                },
+                {
+                    name: 'Sales Development Lead',
+                    value: 14
+                },
+                {
+                    name: 'Payment Consultant',
+                    value: 15
+                },
+                {
+                    name: 'Lead Payment Consultant',
+                    value: 16
+                },
+                {
+                    name: 'Junior Financial Analyst',
+                    value: 17
+                },
+                {
+                    name: 'Financial Analyst',
+                    value: 18
+                },
+                {
+                    name: 'Finance Manager',
+                    value: 19
+                }
+            ]
+           
+        },
+    ])
+}
