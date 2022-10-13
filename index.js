@@ -331,7 +331,45 @@ const addEmployeePrompt = () => {
                     value: 19
                 }
             ]
-           
         },
+        {
+            type: 'list', 
+            name: 'roles',
+            message: 'Who is this employees manager?',
+            choices: [
+                {
+                    name: 'Jordin King',
+                    value: 1
+                },
+                {
+                    name: 'Alanna Calderon',
+                    value: 6
+                },
+                {
+                    name: 'Dakota Mejia',
+                    value: 10
+                },
+                {
+                    name: 'Reece Adkins',
+                    value: 11
+                },
+                {
+                    name: 'Dawson Morrison',
+                    value: 12
+                },
+                {
+                    name: 'Amir Schaefer',
+                    value: 18
+                },
+                {
+                    name: 'Xander Heath',
+                    value: 21
+                },
+                {
+                    name: 'Walter White',
+                    value: 25
+                }
+            ]
+        }
     ])
 }
