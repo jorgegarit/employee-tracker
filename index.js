@@ -334,7 +334,7 @@ const addEmployeePrompt = () => {
         },
         {
             type: 'list', 
-            name: 'roles',
+            name: 'managers',
             message: 'Who is this employees manager?',
             choices: [
                 {
@@ -369,6 +369,160 @@ const addEmployeePrompt = () => {
                     name: 'Walter White',
                     value: 25
                 }
+            ]
+        }
+    ])
+    .then(addEmployee);
+};
+
+const addEmployee = (body) => {
+    // validation check
+    const errors = inputCheck(body, 'first_name', 'last_name', 'roles_id', 'manager_id');
+    if (errors) {
+        console.log(errors);
+        return;
+    }
+    const sql = `INSERT INTO employees (first_name,last_name, roles_id, manager_id )
+                VALUES (?,?,?,?)`;
+    const params = [body.fist_name, body.last_name, body.roles, body.managers];
+
+    db.query(sql, params, (err, result) => {
+        if (err) {
+            console.log(err);
+            return;
+        }
+        console.table(result);
+        initialize();
+    });
+};
+
+const updateEmployeeRolePrompt = () => {
+    inquirer.prompt([
+        {
+            type: 'list',
+            name: 'current',
+            message: 'Who is switching roles?',
+            choices: [
+                {
+                    name: 'Jordin King',
+                    value: 1
+                },
+                {
+                    name: 'Ahmad Liu',
+                    value: 2
+                },
+                {
+                    name: 'Leandro Erickson',
+                    value: 3
+                },
+                {
+                    name: 'Paityn Small',
+                    value: 4
+                },
+                {
+                    name: 'Paris Kim',
+                    value: 5
+                },
+                {
+                    name: 'Alana Calderon',
+                    value: 6
+                },
+                {
+                    name: 'Braxton Hendrix',
+                    value: 7
+                },
+                {
+                    name: 'Harrison Ibarra',
+                    value: 8
+                },
+                {
+                    name: 'Dangelo Perkins',
+                    value: 9
+                },
+                {
+                    name: 'Dakota Mejia',
+                    value: 10
+                },
+                {
+                    name: 'Reece Adkins',
+                    value: 11
+                },
+                {
+                    name: 'Dawson Morrison',
+                    value: 12
+                },
+                {
+                    name: 'Amira Stanley',
+                    value: 13
+                },
+                {
+                    name: 'Julianna Diaz',
+                    value: 14
+                },
+                {
+                    name: 'Leonardo Owens',
+                    value: 15
+                },
+                {
+                    name: 'Dulce Meadows',
+                    value: 16
+                },
+                {
+                    name: 'Madilynn Fuentes',
+                    value: 17
+                },
+                {
+                    name: 'Amir Schaefer',
+                    value: 18
+                },
+                {
+                    name: 'Raina Dalton',
+                    value: 19
+                },
+                {
+                    name: 'Yulian Farmer',
+                    value: 20
+                },
+                {
+                    name: 'Xander Heath',
+                    value: 21
+                },
+                {
+                    name: 'Jaliyah Henry',
+                    value: 22
+                },
+                {
+                    name: 'Trevor Weaver',
+                    value: 23
+                },
+                {
+                    name: 'Khloe Fry',
+                    value: 24
+                },
+                {
+                    name: 'Walter White',
+                    value: 25
+                },
+                {
+                    name: 'Saul Villegas',
+                    value: 26
+                },
+                {
+                    name: 'Dominick Perkins',
+                    value: 27
+                },
+                {
+                    name: 'Benjamin Baley',
+                    value: 28
+                },
+                {
+                    name: 'Cameron Mullen',
+                    value: 29
+                },
+                {
+                    name: 'Mauricio Gaines',
+                    value: 30
+                },
             ]
         }
     ])
