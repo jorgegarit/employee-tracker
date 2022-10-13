@@ -1,22 +1,23 @@
+const { qualifiedTypeIdentifier } = require('@babel/types');
 const inquirer = require('inquirer');
 const mysql = require('mysql2');
 const db = require('./db/connection');
 const inputCheck = require('./utils/inputCheck');
 
-// connect to the database
-db.connect(error => {
-    if (error) throw error;
+// // connect to the database
+// db.connect(error => {
+//     if (error) throw error;
 
-    // start application if conenction is successful
-    console.log(`
-    --------------------------
-    EMPLOYE TRACKER
-    --------------------------
-    `);
+//     // start application if conenction is successful
+//     console.log(`
+//     --------------------------
+//     EMPLOYE TRACKER
+//     --------------------------
+//     `);
 
-    // initialize menu
-    initialize();
-});
+//     // initialize menu
+//     initialize();
+// });
 
 // initialize application and display on console
 const initialize = () => {
@@ -26,7 +27,7 @@ const initialize = () => {
         name: 'selections',
         message: "Please select what you would like to do.",
         choices: ['View Departments', 'View Roles', 'View Employees', 'Add New Department', 
-                    'Add New Role', 'Add New Employee', 'Update Current Employees Role', 'Quit']
+                    'Add New Role', 'Add New Employee', 'Update Current Employees Role']
        } 
     ])
     .then(data => {
@@ -42,10 +43,10 @@ const initialize = () => {
             addRolePrompt();
         } else if (data.selections === 'Add New Employee') {
             addEmployeePrompt();
-        } else if (data.selections === 'Update Current Employee Role') {
+        } else if (data.selections === 'Update Current Employees Role') {
             updateEmployeeRolePrompt();
-        } else if (data.selections === 'Quit') {
-            quitSelections();
+        } else if (data.selection === 'Quit') {
+            promptQuit();
         }
     });
 };
@@ -191,7 +192,7 @@ const addRole = (body) => {
         console.log(errors);
         return;
     }
-    const sql = `INSERT INTO roles (title, salary, department_id)
+    const sql = `INSERT INTO roles (title, salary, departments_id)
                 VALUES (?,?,?)`;
     const params = [body.title, body.salary, body.departments];
 
@@ -377,14 +378,14 @@ const addEmployeePrompt = () => {
 
 const addEmployee = (body) => {
     // validation check
-    const errors = inputCheck(body, 'first_name', 'last_name', 'roles_id', 'manager_id');
+    const errors = inputCheck(body, 'first_name', 'last_name', 'roles', 'managers');
     if (errors) {
         console.log(errors);
         return;
     }
-    const sql = `INSERT INTO employees (first_name,last_name, roles_id, manager_id )
+    const sql = `INSERT INTO employees (first_name, last_name, roles_id, manager_id )
                 VALUES (?,?,?,?)`;
-    const params = [body.fist_name, body.last_name, body.roles, body.managers];
+    const params = [body.first_name, body.last_name, body.roles, body.managers];
 
     db.query(sql, params, (err, result) => {
         if (err) {
@@ -400,7 +401,7 @@ const updateEmployeeRolePrompt = () => {
     inquirer.prompt([
         {
             type: 'list',
-            name: 'current',
+            name: 'employeeSelect',
             message: 'Who is switching roles?',
             choices: [
                 {
@@ -524,6 +525,117 @@ const updateEmployeeRolePrompt = () => {
                     value: 30
                 },
             ]
+        },
+        {
+            type: 'list',
+            name: 'updateRole',
+            message: 'What is the new role of the selected employee?',
+            choices: [
+                {
+                    name: 'UX/UI Developer',
+                    value: 1
+                },
+                {
+                    name: 'Product Development Engineer',
+                    value: 2
+                },
+                {
+                    name: 'Sr. Product Development Engineer',
+                    value: 3
+                },
+                {
+                    name: 'Products Manager',
+                    value: 4
+                },
+                {
+                    name: 'Front-End Developer',
+                    value: 5
+                },
+                {
+                    name: 'Back-End Developer',
+                    value: 6
+                },
+                {
+                    name: 'Full-Stack Lead Developer',
+                    value: 7
+                },
+                {
+                    name: 'Customer Support Rep',
+                    value: 8
+                },
+                {
+                    name: 'Technical Support Rep',
+                    value: 9
+                },
+                {
+                    name: 'Customer Support Lead',
+                    value: 10
+                },
+                {
+                    name: 'Technical Support Lead',
+                    value: 11
+                },
+                {
+                    name: 'Operations Manager',
+                    value: 12
+                },
+                {
+                    name: 'Sales Development Rep',
+                    value: 13
+                },
+                {
+                    name: 'Sales Development Lead',
+                    value: 14
+                },
+                {
+                    name: 'Payment Consultant',
+                    value: 15
+                },
+                {
+                    name: 'Lead Payment Consultant',
+                    value: 16
+                },
+                {
+                    name: 'Junior Financial Analyst',
+                    value: 17
+                },
+                {
+                    name: 'Financial Analyst',
+                    value: 18
+                },
+                {
+                    name: 'Finance Manager',
+                    value: 19
+                }
+            ]
         }
     ])
+    .then(updateEmployee);
 }
+
+const updateEmployee = (body) => {
+    const errors = inputCheck(body, 'employeeSelect', 'updateRole');
+
+    if (errors) {
+        console.log(errors);
+        return;
+    }
+    
+    const sql = `UPDATE employees SET roles_id = ${body.updateRole}
+                WHERE id = ${body.employeeSelect}`;
+    const params = [body.employeeSelect, body.updateRole];
+
+    db.query(sql, params, (err, result) => {
+        if (err) {
+            console.log(err);
+            // check if a record was found
+        } else if (!result.affectedRows) {
+            console.log('Employee not found');
+        } else {
+            console.table(result);
+            initialize();
+        }
+    });
+};
+
+initialize();
