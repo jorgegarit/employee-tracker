@@ -37,7 +37,7 @@ const initialize = () => {
         } else if  (data.selections === 'View Employees') {
             allEmployees();
         } else if (data.selections === 'Add New Department') {
-            addDepartment();
+            addDepartmentPrompt();
         } else if (data.selections === 'Add New Role') {
             addRole();
         } else if (data.selections === 'Add New Employee') {
@@ -50,15 +50,64 @@ const initialize = () => {
     });
 };
 
+// This section will contain the fucntion for getting all department data 
+// as well as prompt to add new department
+
+const allDepartments = (req) => {
+    const sql = `SELECT * FROM departments`;
+
+    db.query(sql, (err, rows) => {
+        if (err) {
+            res.status(500).json({ error: err.message });
+            return;
+        }
+        console.table(rows)
+        initialize();
+    });
+};
+
+// will prompt user for new department information
+const addDepartmentPrompt = () => {
+    inquirer.prompt([
+        {
+            type: 'input',
+            name: 'name',
+            message: 'What is the new department name?',
+            validate: inputtedName => {
+                if (inputtedName) {
+                    return true;
+                } else {
+                    console.log('Please enter a name for the new department.');
+                    return false;
+                }
+            }
+        }
+    ])
+    .then(addDepartment);
+};
+
+const addDepartment = (body) => {
+    // validation check
+    const errors = inputCheck(body, 'name');
+    if (errors) {
+        console.log(errors);
+        return;
+    }
+    const sql = `INSERT INTO departments (name)
+    VALUES (?)`;
+    const params = [body.name];
+
+    db.query(sql, params, (err, result) => {
+        if (err) {
+            console.log(err);
+            return;
+        }
+        console.table(result);
+        initialize();  
+    });
+};
 
 
-// // all departments will be displayed
-// const sql = `SELECT * FROM departments`;
+// This section will contain the fucntion for getting all role data 
+// as well as prompt to add new role
 
-// db.query(sql, (err, rows) => {
-//     if (error) throw error;
-//     console.table(res);
-//     // return back to main menu
-//     initialize();
-    
-// });
